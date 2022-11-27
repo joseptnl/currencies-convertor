@@ -7,6 +7,7 @@ import ExchangeRates from "./Screens/ExchangeRates";
 
 const Stack = createStackNavigator();
 
+//this is app stack
 function MyStack() {
   return (
     <Stack.Navigator>
