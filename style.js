@@ -16,9 +16,6 @@ export default StyleSheet.create({
     alignItems: "center",
     margin: "0 auto",
     cursor: "pointer"
-    // borderRadius: 50,
-    // borderWidth: 1,
-    // padding: 20,
   },
   switchIcon: {
     transform: [{ rotate: "90deg" }]

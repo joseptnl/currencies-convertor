@@ -57,7 +57,7 @@ function CurrencySelector({
         />
       ) : (
         <View style={styles.input}>
-          <Text style={styles.output}>{output}</Text>
+          <Text style={styles.output}>{isNaN(output) ? 0 : output}</Text>
         </View>
       )}
 
