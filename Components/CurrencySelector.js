@@ -5,8 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
-  Image,
-  Button,
   Dimensions,
   FlatList
 } from "react-native";
@@ -14,9 +12,7 @@ import Modal from "react-native-modal";
 import { out } from "react-native/Libraries/Animated/Easing";
 import { currenciesData } from "../currenciesData";
 
-//constants and variables
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 function CurrencySelector({
   initialCurrency,
@@ -32,7 +28,8 @@ function CurrencySelector({
 
   const DATA = currenciesData;
 
-  const calculateChange = (num) => {
+  const calculateChange = (num, currencyType) => {
+    setCurrencyType(currencyType);
     passCurrency(currencyType);
     passValue(num);
   };
@@ -47,10 +44,10 @@ function CurrencySelector({
           style={styles.input}
           keyboardType="numeric"
           returnKeyType="done"
-          onChangeText={(val) => {
-            let num = isNaN(parseInt(val)) ? 0 : val
-            setValue(num)
-            calculateChange(num)
+          onChangeText={val => {
+            let num = isNaN(parseInt(val)) ? 0 : val;
+            setValue(num);
+            calculateChange(num, currencyType);
           }}
           value={editing ? value : output}
           editable={editing}
@@ -70,8 +67,10 @@ function CurrencySelector({
                 <TouchableOpacity
                   style={styles.item}
                   onPress={() => {
-                    setCurrencyType(item);
-                    passCurrency(item);
+                    // setCurrencyType(item);
+                    // passCurrency(item);
+                    // passValue(value);
+                    calculateChange(value, item);
                     handleModal();
                   }}
                 >

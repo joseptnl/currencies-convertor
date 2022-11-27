@@ -28,6 +28,9 @@ ConvertScreen = ({ navigation }) => {
     setSecondCurrency(newCurrency);
   };
 
+  React.useEffect(() => {
+    console.log(JSON.stringify(output));
+  });
   return (
     <View style={styles.container}>
       <CurrencySelector
