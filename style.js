@@ -4,7 +4,6 @@ export default StyleSheet.create({
   container: {
     backgroundColor: "#fff",
     display: "flex",
-    height: "100vh",
     flex: 1,
     padding: 10,
     fontStyle: "Nato"
@@ -32,6 +31,7 @@ export default StyleSheet.create({
     backgroundColor: "#fff"
   },
   btnText: {
-    color: "#4169e1"
+    color: "#4169e1",
+    fontSize: 20
   }
 });

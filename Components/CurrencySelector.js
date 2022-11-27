@@ -5,31 +5,84 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
-  Image
+  Image,
+  Button,
+  Dimensions,
+  FlatList
 } from "react-native";
 import Modal from "react-native-modal";
+import { out } from "react-native/Libraries/Animated/Easing";
+import { currenciesData } from "../currenciesData";
 
-function CurrencySelector({ navigation, currency }) {
-  //const { selected, setSelected } = React.useState(currencies[0]);
-  const [value, onChangeValue] = React.useState("1");
+//constants and variables
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+
+function CurrencySelector({
+  initialCurrency,
+  editing,
+  passValue,
+  passCurrency,
+  output
+}) {
+  const [currencyType, setCurrencyType] = React.useState(initialCurrency);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const [value, setValue] = React.useState(1);
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
+
+  const DATA = currenciesData;
+
+  const calculateChange = (num) => {
+    passCurrency(currencyType);
+    passValue(num);
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.dropdownBox} onPress={handleModal}>
-        <Image
-          style={styles.flag}
-          source={require("../assets/usaFlag.png")}
-        />
-        <Text style={styles.btnText}>{currency.value}</Text>
+        <Text style={styles.btnText}>{currencyType.abbreviation}</Text>
       </TouchableOpacity>
+      {editing ? (
+        <TextInput
+          style={styles.input}
+          keyboardType="numeric"
+          returnKeyType="done"
+          onChangeText={(val) => {
+            let num = isNaN(parseInt(val)) ? 0 : val
+            setValue(num)
+            calculateChange(num)
+          }}
+          value={editing ? value : output}
+          editable={editing}
+        />
+      ) : (
+        <View style={styles.input}>
+          <Text style={styles.output}>{output}</Text>
+        </View>
+      )}
 
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        onChangeText={onChangeValue}
-        value={value}
-      />
+      <Modal isVisible={isModalVisible} style={styles.searchList}>
+        <View style={styles.modalView}>
+          <FlatList
+            data={DATA}
+            renderItem={({ item }) => (
+              <View>
+                <TouchableOpacity
+                  style={styles.item}
+                  onPress={() => {
+                    setCurrencyType(item);
+                    passCurrency(item);
+                    handleModal();
+                  }}
+                >
+                  <Text style={styles.title}>{item.abbreviation}</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            keyExtractor={item => item.id}
+          />
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -49,6 +102,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 10,
+    elevation: 5, // That is the way it works on Android
     padding: 10,
     height: 125
   },
@@ -66,7 +120,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center"
   },
-  btnText: {},
+
   flag: {
     borderRadius: "50%",
     width: 35,
@@ -80,7 +134,56 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "right",
     overflow: "hidden",
-    width: "75%"
+    width: "75%",
+    justifyContent: "center",
+    alignItems: "flex-end",
+    fontSize: 24
+  },
+
+  searchList: {
+    justifyContent: "flex-start",
+    alignItems: "center",
+    margin: 0,
+    paddingHorizontal: 20,
+    paddingVertical: 100,
+    backgroundColor: "#fff"
+  },
+  modalView: {
+    padding: 20,
+    width: windowWidth - 30,
+    backgroundColor: "#fff",
+    marginTop: 30,
+    padding: 2,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  item: {
+    display: "flex",
+    width: windowWidth - 110,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd"
+  },
+  title: {
+    color: "#000",
+    padding: 20,
+    marginHorizontal: 16,
+    fontSize: 25
+  },
+  btn: {
+    marginTop: 30
+  },
+  doneBtnText: {
+    color: "#4169e1"
+  },
+  btnText: {
+    fontSize: 24
+  },
+  output: {
+    fontSize: 24
   }
 });
 
