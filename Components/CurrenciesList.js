@@ -7,12 +7,19 @@ import CurrenciesListItem from "./CurrenciesListItem.js";
 import React from "react";
 
 CurrenciesList = () => {
+
+  const [expandedItem, setExpandedItem] = React.useState(0);
+
+  expansionManager = (currency) => {
+    setExpandedItem(currency.id)
+  }
+
   return (
     <FlatList
       style={styles.currenciesList}
       data={currenciesData}
       renderItem={({item}) => (
-        <CurrenciesListItem currency={item} currenciesData={currenciesData}/>
+        <CurrenciesListItem currency={item} currenciesData={currenciesData} updateExpansion={expansionManager} expanded={item.id == expandedItem ? true : false}/>
       )}
     />
   );

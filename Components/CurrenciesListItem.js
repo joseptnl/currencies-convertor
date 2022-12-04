@@ -8,21 +8,30 @@ import {
 import CurrencyRateSelector from "./CurrencyRateSelector.js";
 import React from "react";
 
-CurrenciesListItem = ({ currency, currenciesData }) => {
-    const calculate = () => currency.rates * currencyToConvert.rates;
+CurrenciesListItem = ({ currency, currenciesData, updateExpansion, expanded }) => {
 
-    const passCurrency = newCurrency => {
-        currencyToConvert = newCurrency
-        setOutput(calculate())
-    };
+    calculate = (currencyToConvert) => {
+        console.log(currency)
+        return currency.id != currencyToConvert.id ? currency.rates * currencyToConvert.rates : 1
+    }
 
-    let currencyToConvert = currenciesData[0]
-    const [output, setOutput] = React.useState(calculate())
+    const [output, setOutput] = React.useState(calculate(currenciesData[0]))
+
+    passCurrency = newCurrency => {
+        setOutput(calculate(newCurrency))
+    }
 
     return (
-        <Collapse>
+        <Collapse
+            isExpanded={expanded}
+            onToggle={() => {
+                if (expanded) updateExpansion({id: 0})
+                else updateExpansion(currency)
+            }}
+            style={[styles.currencyCollapse, expanded == true ? styles.collapseExpanded : null]}
+            >
             {/* Collapse item header */}
-            <CollapseHeader style={styles.currencyHeader}>
+            <CollapseHeader style={expanded == false ? styles.currencyExpandedHeader : styles.currencyNotExpandedHeader}>
                 <View style={styles.currencyPresentation}>
                     <Text style={styles.currencyName}>{currency.name}</Text>
                     <Text style={styles.currencyAbbreviation}>{currency.abbreviation}</Text>
@@ -34,9 +43,7 @@ CurrenciesListItem = ({ currency, currenciesData }) => {
             {/* Collapse item body */}
             <CollapseBody style={styles.currencyBody}>
                 <CurrencyRateSelector
-                    currencies={currenciesData}
                     initialCurrency={currenciesData[0]}
-                    editing={false}
                     passCurrency={passCurrency}
                     output={output}
                 />
@@ -46,21 +53,40 @@ CurrenciesListItem = ({ currency, currenciesData }) => {
 }
 
 const styles = StyleSheet.create({
-    currencyHeader: {
+    currencyCollapse: {
         width: "85%",
-        display: "flex",
-        flexDirection: "row",
+        marginTop: 20,
+        alignSelf: "center",
+        backgroundColor: "#fff",
         shadowColor: "#1d1d1d",
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.2,
         shadowRadius: 10,
         elevation: 5,
-        alignSelf: "center",
-        padding: 15,
-        marginTop: 20,
         borderColor: "#fff",
         borderWidth: 1,
         borderRadius: 10,
+    },
+    currencyExpandedHeader: {
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        alignSelf: "center",
+        padding: 15,
+        borderColor: "#fff",
+        borderWidth: 1,
+        borderRadius: 10,
+        backgroundColor: "#fff"
+    },
+    currencyNotExpandedHeader: {
+        display: "flex",
+        flexDirection: "row",
+        alignSelf: "center",
+        padding: 15,
+        borderBottomColor: "#ccc",
+        borderBottomWidth: 1,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
         backgroundColor: "#fff"
     },
     currencyPresentation: {
@@ -84,7 +110,7 @@ const styles = StyleSheet.create({
         alignSelf: "flex-end"
     },
     currencyBody: {
-        width: "85%",
+        width: "100%",
         alignSelf: "center"
     },
     currencyBodyList: {

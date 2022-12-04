@@ -138,7 +138,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     fontSize: 24
   },
-
   searchList: {
     justifyContent: "flex-start",
     alignItems: "center",
