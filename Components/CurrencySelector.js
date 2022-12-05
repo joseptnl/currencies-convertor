@@ -9,21 +9,25 @@ import {
   FlatList
 } from "react-native";
 import Modal from "react-native-modal";
-import { out } from "react-native/Libraries/Animated/Easing";
 import { currenciesData } from "../currenciesData";
+//import styles from "./cuurencySelectorStyles";
 
 const windowWidth = Dimensions.get("window").width;
 
 function CurrencySelector({
-  initialCurrency,
+  currentCurrency,
   editing,
   passValue,
   passCurrency,
   output
 }) {
-  const [currencyType, setCurrencyType] = React.useState(initialCurrency);
+  const [currencyType, setCurrencyType] = React.useState(currentCurrency);
+
+  //input value is the value as inputted
+  const [inputValue, setInputValue] = React.useState(1);
+
+  // open and close modal (cuurencies list)
   const [isModalVisible, setIsModalVisible] = React.useState(false);
-  const [value, setValue] = React.useState(1);
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
 
   const DATA = currenciesData;
@@ -32,8 +36,10 @@ function CurrencySelector({
     setCurrencyType(currencyType);
     passCurrency(currencyType);
     passValue(num);
+    console.log(num);
   };
 
+  React.useEffect(() => console.log(currencyType));
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.dropdownBox} onPress={handleModal}>
@@ -46,10 +52,10 @@ function CurrencySelector({
           returnKeyType="done"
           onChangeText={val => {
             let num = isNaN(parseInt(val)) ? 0 : val;
-            setValue(num);
+            setInputValue(num);
             calculateChange(num, currencyType);
           }}
-          value={editing ? value : output}
+          value={editing ? inputValue : output}
           editable={editing}
         />
       ) : (
@@ -67,10 +73,11 @@ function CurrencySelector({
                 <TouchableOpacity
                   style={styles.item}
                   onPress={() => {
-                    // setCurrencyType(item);
+                    setCurrencyType(item);
                     // passCurrency(item);
-                    // passValue(value);
-                    calculateChange(value, item);
+                    // passValue(inputValue);
+                    calculateChange(inputValue, item);
+                    console.log(currencyType);
                     handleModal();
                   }}
                 >
