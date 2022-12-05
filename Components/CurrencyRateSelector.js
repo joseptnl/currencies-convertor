@@ -9,12 +9,12 @@ import {
   FlatList
 } from "react-native";
 import Modal from "react-native-modal";
-import { currenciesData } from "../currenciesData";
 import {MaterialIcons} from "@expo/vector-icons"
 
 const windowWidth = Dimensions.get("window").width;
 
 function CurrencyRateSelector({
+  currenciesRates,
   initialCurrency,
   passCurrency,
   output
@@ -22,8 +22,6 @@ function CurrencyRateSelector({
   const [currencyType, setCurrencyType] = React.useState(initialCurrency)
   const [isModalVisible, setIsModalVisible] = React.useState(false)
   const handleModal = () => setIsModalVisible(!isModalVisible)
-
-  const DATA = currenciesData;
 
   const calculateChange = (newCurrencyType) => {
     setCurrencyType(newCurrencyType)
@@ -42,7 +40,7 @@ function CurrencyRateSelector({
       <Modal isVisible={isModalVisible} style={styles.searchList}>
         <View style={styles.modalView}>
           <FlatList
-            data={DATA}
+            data={() => Object.keys(currenciesRates).map((key) => {return {abbreviation: key, rates: currenciesRates[key]}})}
             renderItem={({ item }) => (
               <View>
                 <TouchableOpacity

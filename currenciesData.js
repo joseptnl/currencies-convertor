@@ -42,3 +42,4 @@ export const currenciesData = [
     rates: 0.00072
   }
 ];
+
