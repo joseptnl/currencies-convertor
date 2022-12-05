@@ -64,8 +64,9 @@ ConvertScreen = ({ navigation, route }) => {
         style={styles.button}
         title="Go to rates"
         onPress={() => {
+          let counter = 1
           let rates = Object.keys(currenciesRates).map(key => {
-            return { abbreviation: key, rates: currenciesRates[key] };
+            return { id: counter++, abbreviation: key, rates: currenciesRates[key] };
           });
           navigation.navigate("Exchange Rates", { rates });
         }}

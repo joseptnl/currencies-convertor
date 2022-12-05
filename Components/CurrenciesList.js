@@ -5,7 +5,7 @@ import {
 import CurrenciesListItem from "./CurrenciesListItem.js";
 import React from "react";
 
-CurrenciesList = (currenciesRates) => {
+CurrenciesList = ({currenciesRates}) => {
 
   const [expandedItem, setExpandedItem] = React.useState(0);
 

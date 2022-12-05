@@ -21,8 +21,6 @@ CurrenciesListItem = ({ currency, currenciesRates, updateExpansion, expanded }) 
         setOutput(value)
     }
 
-    console.log(currency)
-
     return (
         <Collapse
             isExpanded={expanded}
@@ -45,7 +43,7 @@ CurrenciesListItem = ({ currency, currenciesRates, updateExpansion, expanded }) 
             <CollapseBody style={styles.currencyBody}>
                 <CurrencyRateSelector
                     currenciesRates={currenciesRates}
-                    initialCurrency={currenciesRates["EUR"]}
+                    initialCurrency={currenciesRates[0]}
                     passCurrency={passCurrency}
                     output={output}
                 />
