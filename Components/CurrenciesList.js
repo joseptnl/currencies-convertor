@@ -1,4 +1,3 @@
-import { currenciesData } from "../currenciesData.js";
 import {
   StyleSheet,
   FlatList
@@ -6,7 +5,7 @@ import {
 import CurrenciesListItem from "./CurrenciesListItem.js";
 import React from "react";
 
-CurrenciesList = () => {
+CurrenciesList = (currenciesRates) => {
 
   const [expandedItem, setExpandedItem] = React.useState(0);
 
@@ -17,11 +16,11 @@ CurrenciesList = () => {
   return (
     <FlatList
       style={styles.currenciesList}
-      data={currenciesData}
+      data={currenciesRates}
       renderItem={({item}) => (
         <CurrenciesListItem 
           currency={item} 
-          currenciesData={currenciesData} 
+          currenciesRates={currenciesRates} 
           updateExpansion={expansionManager} 
           expanded={item.id == expandedItem ? true : false}/>)}
     />

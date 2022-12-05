@@ -8,13 +8,13 @@ import {
 import CurrencyRateSelector from "./CurrencyRateSelector.js";
 import React from "react";
 
-CurrenciesListItem = ({ currency, currenciesData, updateExpansion, expanded }) => {
+CurrenciesListItem = ({ currency, currenciesRates, updateExpansion, expanded }) => {
 
     calculate = (baseCurrencyId, currencySelectedId, baseCurrencyRates, currencySelectedRates) => {
         return baseCurrencyId != currencySelectedId ? baseCurrencyRates * currencySelectedRates : 1
     }
 
-    const [output, setOutput] = React.useState(calculate(currenciesData[0]))
+    const [output, setOutput] = React.useState(calculate(currenciesRates["EUR"]))
 
     passCurrency = newCurrency => {
         let value = calculate(currency.id, newCurrency.id, currency.rates, newCurrency.rates)
@@ -42,7 +42,7 @@ CurrenciesListItem = ({ currency, currenciesData, updateExpansion, expanded }) =
             {/* Collapse item body */}
             <CollapseBody style={styles.currencyBody}>
                 <CurrencyRateSelector
-                    initialCurrency={currenciesData[0]}
+                    initialCurrency={currenciesRates["EUR"]}
                     passCurrency={passCurrency}
                     output={output}
                 />
