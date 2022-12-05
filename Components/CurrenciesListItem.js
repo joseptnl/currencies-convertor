@@ -9,9 +9,11 @@ import CurrencyRateSelector from "./CurrencyRateSelector.js";
 import React from "react";
 
 CurrenciesListItem = ({ currency, currenciesData, updateExpansion, expanded }) => {
+    let counter
 
     calculate = (currencyToConvert) => {
-        console.log(currency)
+        if (currenciesData[0].id == currencyToConvert.id) counter = false
+        else counter = false
         return currency.id != currencyToConvert.id ? currency.rates * currencyToConvert.rates : 1
     }
 
@@ -33,8 +35,7 @@ CurrenciesListItem = ({ currency, currenciesData, updateExpansion, expanded }) =
             {/* Collapse item header */}
             <CollapseHeader style={expanded == false ? styles.currencyExpandedHeader : styles.currencyNotExpandedHeader}>
                 <View style={styles.currencyPresentation}>
-                    <Text style={styles.currencyName}>{currency.name}</Text>
-                    <Text style={styles.currencyAbbreviation}>{currency.abbreviation}</Text>
+                    <Text style={styles.currencyName}>{currency.abbreviation}</Text>
                 </View>
                 <View style={styles.currencyImageContainer}>
                     <Image style={styles.currencyImage} />

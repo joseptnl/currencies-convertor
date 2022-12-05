@@ -10,14 +10,12 @@ import GetCurrenciesRates from '../Services/GetCurrenciesRates.js'
 ExchangeRates = () => {
   const [currenciesRates, setCurrenciesRates] = React.useState([])
 
-  /*
   React.useEffect (() => {
     GetCurrenciesRates("EUR")
     .then((data) => {
       setCurrenciesRates(data.rates)
     })
   }, [])
-  */
 
   return (
     <View style={styles.background}>
