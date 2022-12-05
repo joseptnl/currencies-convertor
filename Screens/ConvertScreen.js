@@ -63,7 +63,7 @@ ConvertScreen = ({ navigation, route }) => {
       <TouchableOpacity
         style={styles.button}
         title="Go to rates"
-        onPress={() => navigation.navigate("Exchange Rates", currenciesRates)}
+        onPress={() => navigation.navigate("Exchange Rates", {currenciesRates})}
       >
         <Text style={styles.btnText}> Click to See Exchange Rates </Text>
       </TouchableOpacity>

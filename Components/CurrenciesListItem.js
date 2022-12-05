@@ -42,6 +42,7 @@ CurrenciesListItem = ({ currency, currenciesRates, updateExpansion, expanded }) 
             {/* Collapse item body */}
             <CollapseBody style={styles.currencyBody}>
                 <CurrencyRateSelector
+                    currenciesRates={currenciesRates}
                     initialCurrency={currenciesRates["EUR"]}
                     passCurrency={passCurrency}
                     output={output}
