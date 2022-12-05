@@ -1,15 +1,16 @@
-import CurrenciesList from "../Components/CurrenciesList.js";
-import { View, StyleSheet, Text } from "react-native";
-import React from "react";
-import GetCurrenciesRates from "../Services/GetCurrenciesRates.js";
 
-ExchangeRates = ({ route }) => {
+import CurrenciesList from "../Components/CurrenciesList.js"
+import {
+  View,
+  StyleSheet,
+  Text
+} from "react-native";
+import React from "react"
+
+ExchangeRates = ({route}) => {
   return (
     <View style={styles.background}>
-      <Text>Hello, {route.params.name}</Text>
-      <CurrenciesList />
-
-      {/** <Text>{currenciesRates != undefined ? currenciesRates["EUR"] : 0}</Text>*/}
+      <CurrenciesList currenciesRates={route.params.currenciesRates}/>
     </View>
   );
 };
