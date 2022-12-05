@@ -10,7 +10,7 @@ import React from "react"
 ExchangeRates = ({route}) => {
   return (
     <View style={styles.background}>
-      <CurrenciesList currenciesRates={route.params.currenciesRates}/>
+      <CurrenciesList currenciesRates={route.params.rates}/>
     </View>
   );
 };
