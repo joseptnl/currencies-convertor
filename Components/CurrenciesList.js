@@ -19,8 +19,11 @@ CurrenciesList = () => {
       style={styles.currenciesList}
       data={currenciesData}
       renderItem={({item}) => (
-        <CurrenciesListItem currency={item} currenciesData={currenciesData} updateExpansion={expansionManager} expanded={item.id == expandedItem ? true : false}/>
-      )}
+        <CurrenciesListItem 
+          currency={item} 
+          currenciesData={currenciesData} 
+          updateExpansion={expansionManager} 
+          expanded={item.id == expandedItem ? true : false}/>)}
     />
   );
 }

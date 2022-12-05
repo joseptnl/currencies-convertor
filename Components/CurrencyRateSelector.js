@@ -9,7 +9,6 @@ import {
   FlatList
 } from "react-native";
 import Modal from "react-native-modal";
-import { out } from "react-native/Libraries/Animated/Easing";
 import { currenciesData } from "../currenciesData";
 import {MaterialIcons} from "@expo/vector-icons"
 
