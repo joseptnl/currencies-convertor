@@ -16,7 +16,7 @@ CurrenciesList = (currenciesRates) => {
   return (
     <FlatList
       style={styles.currenciesList}
-      data={() => Object.keys(currenciesRates).map((key) => {return {abbreviation: key, rates: currenciesRates[key]}})}
+      data={currenciesRates}
       renderItem={({item}) => (
         <CurrenciesListItem 
           currency={item} 

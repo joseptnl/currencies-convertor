@@ -21,6 +21,8 @@ CurrenciesListItem = ({ currency, currenciesRates, updateExpansion, expanded }) 
         setOutput(value)
     }
 
+    console.log(currency)
+
     return (
         <Collapse
             isExpanded={expanded}

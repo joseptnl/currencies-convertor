@@ -40,7 +40,7 @@ function CurrencyRateSelector({
       <Modal isVisible={isModalVisible} style={styles.searchList}>
         <View style={styles.modalView}>
           <FlatList
-            data={() => Object.keys(currenciesRates).map((key) => {return {abbreviation: key, rates: currenciesRates[key]}})}
+            data={currenciesRates}
             renderItem={({ item }) => (
               <View>
                 <TouchableOpacity
