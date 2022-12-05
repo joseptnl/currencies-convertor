@@ -10,60 +10,35 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 import { currenciesData } from "../currenciesData";
-//import styles from "./cuurencySelectorStyles";
+import {MaterialIcons} from "@expo/vector-icons"
 
 const windowWidth = Dimensions.get("window").width;
 
-function CurrencySelector({
-  currentCurrency,
-  editing,
-  passValue,
+function CurrencyRateSelector({
+  initialCurrency,
   passCurrency,
   output
 }) {
-  const [currencyType, setCurrencyType] = React.useState(currentCurrency);
-
-  //input value is the value as inputted
-  const [inputValue, setInputValue] = React.useState(1);
-
-  // open and close modal (cuurencies list)
-  const [isModalVisible, setIsModalVisible] = React.useState(false);
-  const handleModal = () => setIsModalVisible(() => !isModalVisible);
+  const [currencyType, setCurrencyType] = React.useState(initialCurrency)
+  const [isModalVisible, setIsModalVisible] = React.useState(false)
+  const handleModal = () => setIsModalVisible(!isModalVisible)
 
   const DATA = currenciesData;
 
-  const calculateChange = (num, currencyType) => {
-    setCurrencyType(currencyType);
-    passCurrency(currencyType);
-    passValue(num);
-    console.log(num);
+  const calculateChange = (newCurrencyType) => {
+    setCurrencyType(newCurrencyType)
+    passCurrency(newCurrencyType)
   };
 
-  React.useEffect(() => console.log(currencyType));
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.dropdownBox} onPress={handleModal}>
+        <MaterialIcons style={styles.btnIcon} name="arrow-forward-ios"/>
         <Text style={styles.btnText}>{currencyType.abbreviation}</Text>
       </TouchableOpacity>
-      {editing ? (
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          returnKeyType="done"
-          onChangeText={val => {
-            let num = isNaN(parseInt(val)) ? 0 : val;
-            setInputValue(num);
-            calculateChange(num, currencyType);
-          }}
-          value={editing ? inputValue : output}
-          editable={editing}
-        />
-      ) : (
-        <View style={styles.input}>
-          <Text style={styles.output}>{isNaN(output) ? 0 : output}</Text>
-        </View>
-      )}
-
+      <View style={styles.input}>
+        <Text style={styles.output}>{isNaN(output) ? 0 : output}</Text>
+      </View>
       <Modal isVisible={isModalVisible} style={styles.searchList}>
         <View style={styles.modalView}>
           <FlatList
@@ -73,12 +48,8 @@ function CurrencySelector({
                 <TouchableOpacity
                   style={styles.item}
                   onPress={() => {
-                    setCurrencyType(item);
-                    // passCurrency(item);
-                    // passValue(inputValue);
-                    calculateChange(inputValue, item);
-                    console.log(currencyType);
-                    handleModal();
+                    handleModal()
+                    calculateChange(item)
                   }}
                 >
                   <Text style={styles.title}>{item.abbreviation}</Text>
@@ -99,40 +70,28 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    margin: 13,
-    marginBottom: 25,
     borderColor: "#fff",
     borderWidth: 1,
     borderRadius: 10,
-    shadowColor: "#1d1d1d",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-    elevation: 5, // That is the way it works on Android
     padding: 10,
-    height: 125
   },
   dropdownBox: {
-    backgroundColor: "#fff",
-    borderWidth: 0,
-    borderRightColor: "#ddd",
-    borderRightWidth: 1,
     overflow: "hidden",
-    padding: 10,
+    padding: 0,
     width: "45%",
     height: "100%",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    alignItems: "center"
+    alignItems: "center",
+    backgroundColor: "#0084FF",
+    borderRadius: 10
   },
-
   flag: {
     borderRadius: "50%",
     width: 35,
     height: 35
   },
-
   input: {
     backgroundColor: "#fff",
     borderWidth: 0,
@@ -185,11 +144,19 @@ const styles = StyleSheet.create({
     color: "#4169e1"
   },
   btnText: {
-    fontSize: 24
+    fontSize: 24,
+    color: "#ddd",
+    fontWeight: "bold"
+  },
+  btnIcon: {
+    color: "#ddd",
+    fontSize: 23,
+    fontWeight: "bold",
+    transform: [{ rotate: "90deg" }]
   },
   output: {
     fontSize: 24
   }
 });
 
-export default CurrencySelector;
+export default CurrencyRateSelector;
