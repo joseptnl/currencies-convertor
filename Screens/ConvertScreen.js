@@ -10,8 +10,18 @@ import CurrencySelector from "../Components/CurrencySelector";
 import styles from "../style.js";
 
 import { currenciesData } from "../currenciesData";
+import currenciesRates from "../data.json";
 
-ConvertScreen = ({ navigation }) => {
+ConvertScreen = ({ navigation, route }) => {
+  //console.log(myJson.ARS);
+  //const [currenciesRates, setCurrenciesRates] = React.useState({});
+  // React.useEffect(() => {
+  //   GetCurrenciesRates("EUR").then(data => {
+  //     setCurrenciesRates(data.rates);
+  //     console.log(JSON.stringify(data));
+  //   });
+  // }, []);
+
   //currencies represents the data we are using
   // to be changed into an api later
   const currencies = currenciesData;
@@ -53,7 +63,7 @@ ConvertScreen = ({ navigation }) => {
       <TouchableOpacity
         style={styles.button}
         title="Go to rates"
-        onPress={() => navigation.navigate("Exchange Rates")}
+        onPress={() => navigation.navigate("Exchange Rates", currenciesRates)}
       >
         <Text style={styles.btnText}> Click to See Exchange Rates </Text>
       </TouchableOpacity>
