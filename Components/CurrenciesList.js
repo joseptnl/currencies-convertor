@@ -16,13 +16,14 @@ CurrenciesList = ({currenciesRates}) => {
   }
 
   const [expandedCache, setExpandedCache] = React.useState(initExpandedCache());
+  const [lastExpanded, setLastExpanded] = React.useState(0);
 
   expansionManager = (id) => {
-    let cache = expandedCache.map((item, idx) => {
-      if (idx == id - 1) item = !item
-      else item = false
-      return item
-    })
+    let cache = expandedCache
+    cache[id - 1] = !cache[id - 1]
+    if (lastExpanded > 0) cache[lastExpanded - 1] = false
+    if (!cache[id-1]) setLastExpanded(0)
+    else setLastExpanded(id)
     setExpandedCache(cache)
   }  
 
