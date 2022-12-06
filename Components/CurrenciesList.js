@@ -7,22 +7,35 @@ import React from "react";
 
 CurrenciesList = ({currenciesRates}) => {
 
-  const [expandedItem, setExpandedItem] = React.useState(0);
-
-  expansionManager = (currency) => {
-    setExpandedItem(currency.id)
+  initExpandedCache = () => {
+    let cache = []
+    currenciesRates.forEach(() => {
+      cache.push(false)
+    });
+    return cache
   }
+
+  const [expandedCache, setExpandedCache] = React.useState(initExpandedCache());
+
+  expansionManager = (id) => {
+    let cache = expandedCache.map((item, idx) => {
+      if (idx == id - 1) item = !item
+      else item = false
+      return item
+    })
+    setExpandedCache(cache)
+  }  
 
   return (
     <FlatList
       style={styles.currenciesList}
       data={currenciesRates}
-      renderItem={({item}) => (
+      renderItem={({item, idx}) => (
         <CurrenciesListItem 
           currency={item} 
           currenciesRates={currenciesRates} 
           updateExpansion={expansionManager} 
-          expanded={item.id == expandedItem ? true : false}/>)}
+          expanded={expandedCache[item.id - 1]}/>)}
     />
   );
 }
