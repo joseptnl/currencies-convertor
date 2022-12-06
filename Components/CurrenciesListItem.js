@@ -11,10 +11,10 @@ import React from "react";
 CurrenciesListItem = ({ currency, currenciesRates, updateExpansion, expanded }) => {
 
     calculate = (baseCurrencyId, currencySelectedId, baseCurrencyRates, currencySelectedRates) => {
-        return baseCurrencyId != currencySelectedId ? baseCurrencyRates * currencySelectedRates : 1
+        return baseCurrencyId != currencySelectedId ? currencySelectedRates / baseCurrencyRates : 1
     }
 
-    const [output, setOutput] = React.useState(calculate(currenciesRates["EUR"]))
+    const [output, setOutput] = React.useState(0)
 
     passCurrency = newCurrency => {
         let value = calculate(currency.id, newCurrency.id, currency.rates, newCurrency.rates)
@@ -25,8 +25,12 @@ CurrenciesListItem = ({ currency, currenciesRates, updateExpansion, expanded }) 
         <Collapse
             isExpanded={expanded}
             onToggle={() => {
-                if (expanded) updateExpansion({id: 0})
-                else updateExpansion(currency)
+                if (expanded) updateExpansion(0)
+                else {
+                    let value = calculate(currency.id, currenciesRates[0].id, currency.rates, currenciesRates[0].rates)
+                    setOutput(value)
+                    updateExpansion(currency.id)
+                }
             }}
             style={[styles.currencyCollapse, expanded == true ? styles.collapseExpanded : null]}
             >
@@ -135,4 +139,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default CurrenciesListItem;
+export default React.memo(CurrenciesListItem);
