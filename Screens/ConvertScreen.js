@@ -3,45 +3,60 @@ import { View, Text, TouchableOpacity } from "react-native";
 //import Test from "../Components/Test";
 // import Icon from "react-native-vector-icons/Octicons";
 
+//import currenciesRates from "/home/code/Desktop/currencies-convertor/data.json";
+
 // compnents
 import CurrencySelector from "../Components/CurrencySelector";
+import GetCurrenciesRates from "../Services/GetCurrenciesRates";
 
 //styles
 import styles from "../style.js";
 
-import { currenciesData } from "../currenciesData";
-import currenciesRates from "../data.json";
+ConvertScreen = ({ navigation, props }) => {
+  const [currenciesRates1, setCurrenciesRates] = React.useState({});
+  React.useEffect(() => {
+    GetCurrenciesRates("EUR").then(data => {
+      setCurrenciesRates(data.rates);
+      //console.log(JSON.stringify(data));
+    });
+  }, []);
 
-ConvertScreen = ({ navigation, route }) => {
-  //console.log(myJson.ARS);
-  //const [currenciesRates, setCurrenciesRates] = React.useState({});
-  // React.useEffect(() => {
-  //   GetCurrenciesRates("EUR").then(data => {
-  //     setCurrenciesRates(data.rates);
-  //     console.log(JSON.stringify(data));
-  //   });
-  // }, []);
+  let counter = 1;
+  let rates = Object.keys(currenciesRates1).map(key => {
+    return {
+      id: counter++,
+      abbreviation: key,
+      rates: currenciesRates1[key]
+    };
+  });
 
-  //currencies represents the data we are using
-  // to be changed into an api later
-  const currencies = currenciesData;
+  /** this needs to be changed */
+  const [firstCurrency, setFirstCurrency] = React.useState({
+    id: 1,
+    abbreviation: "EUR",
+    name: "Euro",
+    rates: 1
+  });
+  const [secondCurrency, setSecondCurrency] = React.useState({
+    id: 1,
+    abbreviation: "EUR",
+    name: "Euro",
+    rates: 1
+  });
 
-  //testing purposes: change me if needed
-  const [firstCurrency, setFirstCurrency] = React.useState(currencies[1]);
-  const [secondCurrency, setSecondCurrency] = React.useState(currencies[1]);
-  const [output, setOutput] = React.useState(
-    firstCurrency.rates[secondCurrency.id - 1] * 1
-  );
+  if (firstCurrency === undefined) console.log("hello");
+  const [output, setOutput] = React.useState(firstCurrency.rates);
 
+  //this needs to be changed
   const passValue = newVal => {
-    setOutput((firstCurrency.rates * newVal) / secondCurrency.rates);
+    setOutput((newVal * secondCurrency.rates) / firstCurrency.rates);
   };
-  console.log(output);
 
   return (
     <View style={styles.container}>
       {/**first currency */}
       <CurrencySelector
+        ratesData={rates}
         currentCurrency={firstCurrency}
         initialValue={"1"}
         editing={true}
@@ -52,6 +67,7 @@ ConvertScreen = ({ navigation, route }) => {
 
       {/**second currency */}
       <CurrencySelector
+        ratesData={rates}
         currentCurrency={secondCurrency}
         editing={false}
         output={output}
@@ -64,10 +80,6 @@ ConvertScreen = ({ navigation, route }) => {
         style={styles.button}
         title="Go to rates"
         onPress={() => {
-          let counter = 1
-          let rates = Object.keys(currenciesRates).map(key => {
-            return { id: counter++, abbreviation: key, rates: currenciesRates[key] };
-          });
           navigation.navigate("Exchange Rates", { rates });
         }}
       >
