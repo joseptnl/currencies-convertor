@@ -12,14 +12,40 @@ import GetCurrenciesRates from "../Services/GetCurrenciesRates";
 //styles
 import styles from "../style.js";
 
+import {NetworkInfo} from 'react-native-network-info';
+
 ConvertScreen = ({ navigation, props }) => {
   const [currenciesRates1, setCurrenciesRates] = React.useState({});
+  const [currentIpAddress, setCurrentIpAddress] = React.useState(undefined);
+
   React.useEffect(() => {
+    // Get Local IP
+    NetworkInfo.getIPAddress().then(ipAddress => {
+      setCurrentIpAddress(ipAddress)
+    });
+    // Set currencies rates
     GetCurrenciesRates("EUR").then(data => {
-      setCurrenciesRates(data.rates);
-      //console.log(JSON.stringify(data));
+      if (data.rates != undefined)
+        setCurrenciesRates(data.rates);
     });
   }, []);
+
+  React.useEffect(() => {
+    if (currentIpAddress != undefined) {
+      console.log(ipAddress)
+      var myHeaders = new Headers();
+      myHeaders.append("apikey", "KUBjNwG3YzUBaCdiWW4UviGQKHLJ8qo7");
+
+      var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+        headers: myHeaders
+      };
+      fetch(`https://api.apilayer.com/ip_to_location/${ipAddress}`, requestOptions)
+        .then(response => response.json())
+        .then(response => console.log(response))
+    }
+  }, [currentIpAddress]);
 
   let counter = 1;
   let rates = Object.keys(currenciesRates1).map(key => {
