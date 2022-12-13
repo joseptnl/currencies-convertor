@@ -1,7 +1,7 @@
 import { API_KEY } from "@env";
 
 GetCurrenciesRates = baseCurrency => {
-  console.log(API_KEY);
+  //console.log(API_KEY);
   return fetch(
     "https://api.apilayer.com/fixer/latest?base=" + baseCurrency + "",
     {

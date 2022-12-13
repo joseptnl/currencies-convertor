@@ -19,7 +19,8 @@ function CurrencySelector({
   editing,
   passValue,
   passCurrency,
-  output
+  output,
+  ratesData
 }) {
   const [currencyType, setCurrencyType] = React.useState(currentCurrency);
 
@@ -30,16 +31,19 @@ function CurrencySelector({
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
 
-  const DATA = currenciesData;
+  //const DATA = currenciesData;
+  const DATA = ratesData;
 
   const calculateChange = (num, currencyType) => {
     setCurrencyType(currencyType);
     passCurrency(currencyType);
-    passValue(num);
-    console.log(num);
   };
 
-  React.useEffect(() => console.log(currencyType));
+  const pass = num => {
+    passValue(num);
+  };
+
+  //React.useEffect(() => console.log(currencyType));
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.dropdownBox} onPress={handleModal}>
@@ -54,6 +58,7 @@ function CurrencySelector({
             let num = isNaN(parseInt(val)) ? 0 : val;
             setInputValue(num);
             calculateChange(num, currencyType);
+            pass(num);
           }}
           value={editing ? inputValue : output}
           editable={editing}
@@ -77,7 +82,7 @@ function CurrencySelector({
                     // passCurrency(item);
                     // passValue(inputValue);
                     calculateChange(inputValue, item);
-                    console.log(currencyType);
+                    //console.log(currencyType);
                     handleModal();
                   }}
                 >
