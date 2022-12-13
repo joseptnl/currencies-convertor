@@ -12,17 +12,25 @@ import GetCurrenciesRates from "../Services/GetCurrenciesRates";
 //styles
 import styles from "../style.js";
 
-import {NetworkInfo} from 'react-native-network-info';
-
 ConvertScreen = ({ navigation, props }) => {
   const [currenciesRates1, setCurrenciesRates] = React.useState({});
   const [currentIpAddress, setCurrentIpAddress] = React.useState(undefined);
 
+  // Configurign ip request
+  let request = new XMLHttpRequest()
+  request.open('GET', 'https://api.ipify.org?format=json', true) // set true for asynchronous
+  request.setRequestHeader('Accept', 'application/json')
+  request.onreadystatechange = function () {
+    if (this.readyState === 4 && this.status === 200) {
+      let response = JSON.parse(this.responseText)
+      setCurrentIpAddress(response.ip)
+    }
+  }
+
   React.useEffect(() => {
     // Get Local IP
-    NetworkInfo.getIPAddress().then(ipAddress => {
-      setCurrentIpAddress(ipAddress)
-    });
+    request.send()
+
     // Set currencies rates
     GetCurrenciesRates("EUR").then(data => {
       if (data.rates != undefined)
@@ -32,7 +40,6 @@ ConvertScreen = ({ navigation, props }) => {
 
   React.useEffect(() => {
     if (currentIpAddress != undefined) {
-      console.log(ipAddress)
       var myHeaders = new Headers();
       myHeaders.append("apikey", "KUBjNwG3YzUBaCdiWW4UviGQKHLJ8qo7");
 
@@ -41,7 +48,7 @@ ConvertScreen = ({ navigation, props }) => {
         redirect: 'follow',
         headers: myHeaders
       };
-      fetch(`https://api.apilayer.com/ip_to_location/${ipAddress}`, requestOptions)
+      fetch(`https://api.apilayer.com/ip_to_location/${currentIpAddress}`, requestOptions)
         .then(response => response.json())
         .then(response => console.log(response))
     }
