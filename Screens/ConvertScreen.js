@@ -15,28 +15,45 @@ import styles from "../style.js";
 ConvertScreen = ({ navigation, props }) => {
   const [currenciesRates1, setCurrenciesRates] = React.useState({});
   const [currentIpAddress, setCurrentIpAddress] = React.useState(undefined);
-
-  // Configurign ip request
-  let request = new XMLHttpRequest()
-  request.open('GET', 'https://api.ipify.org?format=json', true) // set true for asynchronous
-  request.setRequestHeader('Accept', 'application/json')
-  request.onreadystatechange = function () {
-    if (this.readyState === 4 && this.status === 200) {
-      let response = JSON.parse(this.responseText)
-      setCurrentIpAddress(response.ip)
-    }
-  }
+  const [firstCurrency, setFirstCurrency] = React.useState({});
+  const [secondCurrency, setSecondCurrency] = React.useState({});
+  const [rates, setRates] = React.useState([]);
+  const [renderCond, setRenderCond] = React.useState(false);
 
   React.useEffect(() => {
-    // Get Local IP
-    request.send()
+    let counter = 1;
+    setRates(
+      Object.keys(currenciesRates1).map(key => {
+        return {
+          id: counter++,
+          abbreviation: key,
+          rates: currenciesRates1[key]
+        };
+      })
+    );
+  }, [currenciesRates1]);
 
+  // Configurign ip request
+  let request = new XMLHttpRequest();
+  request.open("GET", "https://api.ipify.org?format=json", true); // set true for asynchronous
+  request.setRequestHeader("Accept", "application/json");
+  request.onreadystatechange = function() {
+    if (this.readyState === 4 && this.status === 200) {
+      let response = JSON.parse(this.responseText);
+      setCurrentIpAddress(response.ip);
+    }
+  };
+
+  React.useEffect(() => {
     // Set currencies rates
     GetCurrenciesRates("EUR").then(data => {
-      if (data.rates != undefined)
-        setCurrenciesRates(data.rates);
+      if (data.rates != undefined) setCurrenciesRates(data.rates);
     });
+    // Get Local IP
+    request.send();
   }, []);
+
+  const [countryData, setCountryData] = React.useState({});
 
   React.useEffect(() => {
     if (currentIpAddress != undefined) {
@@ -44,41 +61,42 @@ ConvertScreen = ({ navigation, props }) => {
       myHeaders.append("apikey", "KUBjNwG3YzUBaCdiWW4UviGQKHLJ8qo7");
 
       var requestOptions = {
-        method: 'GET',
-        redirect: 'follow',
+        method: "GET",
+        redirect: "follow",
         headers: myHeaders
       };
-      fetch(`https://api.apilayer.com/ip_to_location/${currentIpAddress}`, requestOptions)
+      fetch(
+        `https://api.apilayer.com/ip_to_location/${currentIpAddress}`,
+        requestOptions
+      )
         .then(response => response.json())
-        .then(response => console.log(response))
+
+        .then(response => {
+          //setCountryData(response);
+          let fcurrency = rates.find(
+            currency =>
+              currency.abbreviation == response["currencies"][0]["code"]
+          );
+          setFirstCurrency(fcurrency);
+          let c2 = rates[0];
+          setSecondCurrency(c2);
+        });
     }
-  }, [currentIpAddress]);
 
-  let counter = 1;
-  let rates = Object.keys(currenciesRates1).map(key => {
-    return {
-      id: counter++,
-      abbreviation: key,
-      rates: currenciesRates1[key]
-    };
-  });
+    // setFirstCurrency(() =>
+    //   rates.find(
+    //     currency =>
+    //       currency.abbreviation === countryData["currencies"][0]["code"]
+    //   )
+    // );
+    // setSecondCurrency(rates[0]);
+    // console.log(firstCurrency);
+    // console.log(secondCurrency);
+  }, [currentIpAddress, rates]);
 
-  /** this needs to be changed */
-  const [firstCurrency, setFirstCurrency] = React.useState({
-    id: 1,
-    abbreviation: "EUR",
-    name: "Euro",
-    rates: 1
-  });
-  const [secondCurrency, setSecondCurrency] = React.useState({
-    id: 1,
-    abbreviation: "EUR",
-    name: "Euro",
-    rates: 1
-  });
+  //console.log(firstCurrency);
 
-  if (firstCurrency === undefined) console.log("hello");
-  const [output, setOutput] = React.useState(firstCurrency.rates);
+  const [output, setOutput] = React.useState("");
 
   //this needs to be changed
   const passValue = newVal => {
@@ -87,13 +105,11 @@ ConvertScreen = ({ navigation, props }) => {
 
   return (
     <View style={styles.container}>
-      {/**first currency */}
       <CurrencySelector
         ratesData={rates}
         currentCurrency={firstCurrency}
         initialValue={"1"}
         editing={true}
-        //this is where the problem lays
         passCurrency={setFirstCurrency}
         passValue={passValue}
       />

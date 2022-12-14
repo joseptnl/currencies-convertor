@@ -23,7 +23,7 @@ function CurrencySelector({
   ratesData
 }) {
   const [currencyType, setCurrencyType] = React.useState(currentCurrency);
-
+  //console.log(currencyType);
   //input value is the value as inputted
   const [inputValue, setInputValue] = React.useState(1);
 
@@ -37,7 +37,12 @@ function CurrencySelector({
   const calculateChange = (num, currencyType) => {
     setCurrencyType(currencyType);
     passCurrency(currencyType);
+    //passCurrency(currentCurrency);
   };
+
+  React.useEffect(() => {
+    setCurrencyType(currentCurrency);
+  }, [currentCurrency]);
 
   const pass = num => {
     passValue(num);
@@ -47,7 +52,9 @@ function CurrencySelector({
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.dropdownBox} onPress={handleModal}>
-        <Text style={styles.btnText}>{currencyType.abbreviation}</Text>
+        <Text style={styles.btnText}>
+          {currencyType == undefined ? "" : currencyType.abbreviation}
+        </Text>
       </TouchableOpacity>
       {editing ? (
         <TextInput

@@ -7,7 +7,7 @@ GetCurrenciesRates = baseCurrency => {
       method: "GET",
       redirect: "follow",
       headers: {
-        apikey: "WeKsp3DDZ9QSiWtXaH2Z95Jkq2Wa92iT"
+        apikey: "plMPsEaZoFt885eZD8tfPf9sh9lcryPY"
       }
     }
   ).then(response => response.json());
